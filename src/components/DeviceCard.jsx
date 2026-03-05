@@ -30,26 +30,6 @@ function DeviceCard({ device, roomName }) {
         }
       `}
     >
-      {/* Action buttons (visible on hover) */}
-      <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-        <button
-          onClick={handleBookmark}
-          className="w-7 h-7 rounded-lg bg-bg-card/80 flex items-center justify-center
-                     text-text-muted hover:text-accent-amber transition-colors"
-          title="Bookmark"
-        >
-          <Star size={12} />
-        </button>
-        <button
-          onClick={handleDelete}
-          className="w-7 h-7 rounded-lg bg-bg-card/80 flex items-center justify-center
-                     text-text-muted hover:text-accent-red transition-colors"
-          title="Delete device"
-        >
-          <Trash2 size={12} />
-        </button>
-      </div>
-
       {/* Top */}
       <div className="flex items-start justify-between mb-5">
         <div
@@ -59,12 +39,33 @@ function DeviceCard({ device, roomName }) {
         >
           <Icon size={20} style={{ color: device.color }} />
         </div>
-        <ToggleSwitch
-          isOn={device.isOn}
-          onToggle={handleToggle}
-          label={`Toggle ${device.name}`}
-          size="sm"
-        />
+        <div className="flex items-center gap-2">
+          {/* Action buttons (visible on hover) */}
+          <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+            <button
+              onClick={handleBookmark}
+              className="w-7 h-7 rounded-lg bg-bg-card/80 flex items-center justify-center
+                         text-text-muted hover:text-accent-amber transition-colors"
+              title="Bookmark"
+            >
+              <Star size={12} />
+            </button>
+            <button
+              onClick={handleDelete}
+              className="w-7 h-7 rounded-lg bg-bg-card/80 flex items-center justify-center
+                         text-text-muted hover:text-accent-red transition-colors"
+              title="Delete device"
+            >
+              <Trash2 size={12} />
+            </button>
+          </div>
+          <ToggleSwitch
+            isOn={device.isOn}
+            onToggle={handleToggle}
+            label={`Toggle ${device.name}`}
+            size="sm"
+          />
+        </div>
       </div>
 
       {/* Bottom */}
