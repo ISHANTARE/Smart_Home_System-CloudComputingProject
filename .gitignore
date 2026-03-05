@@ -1,0 +1,6 @@
+node_modules
+dist
+.env
+server/smarth.db
+server/smarth.db-shm
+server/smarth.db-wal
