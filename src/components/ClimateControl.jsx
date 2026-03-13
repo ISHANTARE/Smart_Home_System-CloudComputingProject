@@ -34,7 +34,19 @@ function ClimateControl({ config, roomName }) {
   };
 
   const handleSpeedChange = (spd) => {
-    if (!isOn) return;
+    // If speed is 0 (Off)
+    if (spd === 0) {
+      updateClimate(roomName, { isOn: false, defaultSpeed: 0 });
+      return;
+    }
+    
+    // If turning on to a specific speed from off state
+    if (!isOn) {
+      updateClimate(roomName, { isOn: true, defaultSpeed: spd });
+      return;
+    }
+
+    // Changing speed while already on
     updateClimate(roomName, { defaultSpeed: spd });
   };
 
@@ -69,17 +81,21 @@ function ClimateControl({ config, roomName }) {
               return (
                 <button
                   key={mode.label}
-                  onClick={() => isOn && setActiveMode(mode.label)}
+                  onClick={() => {
+                    if (!isOn) {
+                      updateClimate(roomName, { isOn: true });
+                    }
+                    setActiveMode(mode.label);
+                  }}
                   className={`
                     flex-1 aspect-square max-w-[44px] rounded-xl flex items-center justify-center
                     transition-all duration-200
-                    ${active
+                    ${active && isOn
                       ? 'bg-accent-blue text-white shadow-lg shadow-accent-blue/30 scale-105'
-                      : 'bg-bg-card-inner text-text-muted hover:text-text-gray'
+                      : 'bg-bg-card-inner text-text-muted hover:text-text-white hover:border hover:border-border-line'
                     }
-                    ${!isOn ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer'}
+                    ${!isOn ? 'opacity-50' : ''}
                   `}
-                  disabled={!isOn}
                   aria-label={`${mode.label} mode`}
                 >
                   <Icon size={16} />
@@ -112,13 +128,12 @@ function ClimateControl({ config, roomName }) {
                 className={`
                   flex-1 py-2 rounded-xl text-[11px] font-semibold
                   transition-all duration-200
-                  ${speed === i
+                  ${speed === i && isOn
                     ? 'bg-accent-blue text-white shadow-lg shadow-accent-blue/30'
                     : 'bg-bg-card-inner text-text-muted hover:text-text-gray'
                   }
-                  ${!isOn ? 'opacity-40 cursor-not-allowed' : ''}
+                  ${speed === 0 && !isOn ? 'bg-bg-card-inner text-white border border-border-line' : ''}
                 `}
-                disabled={!isOn}
               >
                 {label}
               </button>

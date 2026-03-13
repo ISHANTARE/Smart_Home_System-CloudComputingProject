@@ -17,10 +17,20 @@ async function request(endpoint, options = {}) {
         headers,
     });
 
-    const data = await res.json();
+    let data;
+    const contentType = res.headers.get('content-type');
+    if (contentType && contentType.includes('application/json')) {
+        data = await res.json();
+    } else {
+        // Handle non-JSON responses like Vite proxy's 504 Gateway Timeout HTML page
+        data = { error: `Unexpected response format (Status ${res.status})` };
+        if (res.status === 504 || res.status === 502) {
+            data.error = 'Backend server is down. Please run "npm run dev:full" instead of "npm run dev".';
+        }
+    }
 
     if (!res.ok) {
-        throw new Error(data.error || 'Request failed');
+        throw new Error(data?.error || 'Request failed');
     }
 
     return data;
